@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Security Developer">
+  <meta name="keywords" content="扫描器,">
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="Hi, this is Sera Wang from Shanghai, learning in Xi’an, working in Beijing for now. I fond of playing ps4 / ns / dota / Euphorias 4, reading books like《巷説百物語》，《羅生門》，and world history. And I travel f">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about">
-<meta property="og:url" content="https://selfsolo.com/about/index.html">
+<meta name="description" content="扫描器应该是最常见的安全工具了，子域名搜集又是信息搜集里很关键的一步，因为它拓展了很大一部分的攻击面。这篇是我对子域名搜集的认识。">
+<meta name="keywords" content="扫描器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="扫描器实现 - 子域名">
+<meta property="og:url" content="https://selfsolo.com/2019/09/15/扫描器实现-子域名/index.html">
 <meta property="og:site_name" content="My Solo">
-<meta property="og:description" content="Hi, this is Sera Wang from Shanghai, learning in Xi’an, working in Beijing for now. I fond of playing ps4 / ns / dota / Euphorias 4, reading books like《巷説百物語》，《羅生門》，and world history. And I travel f">
+<meta property="og:description" content="扫描器应该是最常见的安全工具了，子域名搜集又是信息搜集里很关键的一步，因为它拓展了很大一部分的攻击面。这篇是我对子域名搜集的认识。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-15T05:50:54.966Z">
+<meta property="og:updated_time" content="2019-09-15T03:18:59.541Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about">
-<meta name="twitter:description" content="Hi, this is Sera Wang from Shanghai, learning in Xi’an, working in Beijing for now. I fond of playing ps4 / ns / dota / Euphorias 4, reading books like《巷説百物語》，《羅生門》，and world history. And I travel f">
+<meta name="twitter:title" content="扫描器实现 - 子域名">
+<meta name="twitter:description" content="扫描器应该是最常见的安全工具了，子域名搜集又是信息搜集里很关键的一步，因为它拓展了很大一部分的攻击面。这篇是我对子域名搜集的认识。">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="https://selfsolo.com/about/">
+  <link rel="canonical" href="https://selfsolo.com/2019/09/15/扫描器实现-子域名/">
 
 
 
 
 
-  <title>about | My Solo</title>
+  <title>扫描器实现 - 子域名 | My Solo</title>
   
 
 
@@ -250,51 +251,202 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://selfsolo.com/2019/09/15/扫描器实现-子域名/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sera Wang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/Lark20190914-203242.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Solo">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">about</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <br>
-
-<p>Hi, this is Sera Wang from Shanghai, learning in Xi’an, working in Beijing for now.</p>
-<p>I fond of playing ps4 / ns / dota / Euphorias 4, reading books like《巷説百物語》，《羅生門》，and world history. And I travel for finding native culture. </p>
-<hr>
-<p>My Pro Intro listed as follow:</p>
-<h3 id="Skill"><a href="#Skill" class="headerlink" title="Skill"></a>Skill</h3><p>Basic: Linux, Cyber Security (web), develop</p>
-<p>Language：Python, Golang</p>
-<p>I can read: c, java, javascript, html, css, sql</p>
-<h3 id="Log"><a href="#Log" class="headerlink" title="Log"></a>Log</h3><blockquote>
-<p>2016.6 - 2020.6 NorthWest University  |  Student</p>
-</blockquote>
-<p>learn about cyber security, tcp/ip, dns, internet, develop websites</p>
-<p>and how their works.</p>
-<blockquote>
-<p>2019.4 ~ Now ByteDance  |  Security Developer</p>
-</blockquote>
-<p>learning to code delicately. Attend several project such as Blackbox-Scanner, SDLC, IDC Outgoing Control</p>
-
+          <h1 class="post-title" itemprop="name headline">扫描器实现 - 子域名</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-15T11:02:51+08:00">
+                2019-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/security/" itemprop="url" rel="index">
+                    <span itemprop="name">security</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/15/扫描器实现-子域名/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/09/15/扫描器实现-子域名/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/09/15/扫描器实现-子域名/" class="leancloud_visitors" data-flag-title="扫描器实现 - 子域名">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>扫描器应该是最常见的安全工具了，子域名搜集又是信息搜集里很关键的一步，因为它拓展了很大一部分的攻击面。这篇是我对子域名搜集的认识。</p>
+<a id="more"></a>
+
+
+
+<p>我实现的一个子域名搜集工具</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Language: Python</span><br><span class="line">搜集方法：</span><br><span class="line"><span class="number">1.</span> 字典</span><br><span class="line"><span class="number">2.</span> 搜索引擎</span><br><span class="line"><span class="number">3.</span> 开源情报</span><br><span class="line"><span class="number">4.</span> ip反查</span><br><span class="line"><span class="number">5.</span> tls证书获取</span><br><span class="line"></span><br><span class="line">可以识别：</span><br><span class="line"><span class="number">1.</span> 内外网多级子域名，内外网判断，泛解析过滤，cdn判断</span><br></pre></td></tr></table></figure>
+
+<p>扫描器的效率方面，单机可以用多进程+协程的方式去提qps，资源够也可以使用分布式，kafka / celery。</p>
+<p>我使用的前者，部署最方便。</p>
+<p>整体架构：</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/扫描器/" rel="tag"># 扫描器</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/14/hello-world/" rel="next" title="旧Blog不再使用，重新审视自己">
+                <i class="fa fa-chevron-left"></i> 旧Blog不再使用，重新审视自己
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -330,17 +482,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -412,22 +555,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Skill"><span class="nav-number">1.</span> <span class="nav-text">Skill</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log"><span class="nav-number">2.</span> <span class="nav-text">Log</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

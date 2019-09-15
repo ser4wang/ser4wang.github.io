@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://selfsolo.com/"/>
-  <updated>2019-09-15T02:24:06.913Z</updated>
+  <updated>2019-09-15T03:18:59.541Z</updated>
   <id>https://selfsolo.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>扫描器实现 - 子域名</title>
+    <link href="https://selfsolo.com/2019/09/15/%E6%89%AB%E6%8F%8F%E5%99%A8%E5%AE%9E%E7%8E%B0-%E5%AD%90%E5%9F%9F%E5%90%8D/"/>
+    <id>https://selfsolo.com/2019/09/15/扫描器实现-子域名/</id>
+    <published>2019-09-15T03:02:51.000Z</published>
+    <updated>2019-09-15T03:18:59.541Z</updated>
+    
+    <content type="html"><![CDATA[<p>扫描器应该是最常见的安全工具了，子域名搜集又是信息搜集里很关键的一步，因为它拓展了很大一部分的攻击面。这篇是我对子域名搜集的认识。</p><a id="more"></a><p>我实现的一个子域名搜集工具</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Language: Python</span><br><span class="line">搜集方法：</span><br><span class="line"><span class="number">1.</span> 字典</span><br><span class="line"><span class="number">2.</span> 搜索引擎</span><br><span class="line"><span class="number">3.</span> 开源情报</span><br><span class="line"><span class="number">4.</span> ip反查</span><br><span class="line"><span class="number">5.</span> tls证书获取</span><br><span class="line"></span><br><span class="line">可以识别：</span><br><span class="line"><span class="number">1.</span> 内外网多级子域名，内外网判断，泛解析过滤，cdn判断</span><br></pre></td></tr></table></figure><p>扫描器的效率方面，单机可以用多进程+协程的方式去提qps，资源够也可以使用分布式，kafka / celery。</p><p>我使用的前者，部署最方便。</p><p>整体架构：</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;扫描器应该是最常见的安全工具了，子域名搜集又是信息搜集里很关键的一步，因为它拓展了很大一部分的攻击面。这篇是我对子域名搜集的认识。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="security" scheme="https://selfsolo.com/categories/security/"/>
+    
+    
+      <category term="扫描器" scheme="https://selfsolo.com/tags/%E6%89%AB%E6%8F%8F%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>旧Blog不再使用，重新审视自己</title>
