@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>My Solo</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://selfsolo.com/"/>
+  <updated>2019-09-15T02:24:06.913Z</updated>
+  <id>https://selfsolo.com/</id>
+  
+  <author>
+    <name>Sera Wang</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>旧Blog不再使用，重新审视自己</title>
+    <link href="https://selfsolo.com/2019/09/14/hello-world/"/>
+    <id>https://selfsolo.com/2019/09/14/hello-world/</id>
+    <published>2019-09-14T12:04:30.577Z</published>
+    <updated>2019-09-15T02:24:06.913Z</updated>
+    
+    <content type="html"><![CDATA[<p>从大一接触安全，懵懵懂懂直到临近毕业，再到字节实习，认识了很多技术大佬，它山之高，让我看到了很多不同的层面和角度，想把这个blog作为道标，重新开始一条严谨对待自己和人生的技术之路。</p><a id="more"></a>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;从大一接触安全，懵懵懂懂直到临近毕业，再到字节实习，认识了很多技术大佬，它山之高，让我看到了很多不同的层面和角度，想把这个blog作为道标，重新开始一条严谨对待自己和人生的技术之路。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+  </entry>
+  
+</feed>
