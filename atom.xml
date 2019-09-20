@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://selfsolo.com/"/>
-  <updated>2019-09-16T11:49:57.176Z</updated>
+  <updated>2019-09-20T06:43:00.869Z</updated>
   <id>https://selfsolo.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>开源DNS服务器源码解析</title>
+    <link href="https://selfsolo.com/2019/09/18/%E5%BC%80%E6%BA%90DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
+    <id>https://selfsolo.com/2019/09/18/开源DNS服务器源码解析/</id>
+    <published>2019-09-18T12:32:56.000Z</published>
+    <updated>2019-09-20T06:43:00.869Z</updated>
+    
+    <content type="html"><![CDATA[<p>DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。</p><a id="more"></a><p>我们选择一个开源的DNS服务器，这里笔者选择的是 <a href="https://github.com/PowerDNS/pdns" target="_blank" rel="noopener">PowerDNS</a>，1800多star，也是很多公司搭建DNS服务的一个常见选择。</p><p>to be continued.</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="sourcecode" scheme="https://selfsolo.com/categories/sourcecode/"/>
+    
+    
+      <category term="源码" scheme="https://selfsolo.com/tags/%E6%BA%90%E7%A0%81/"/>
+    
+      <category term="dns" scheme="https://selfsolo.com/tags/dns/"/>
+    
+  </entry>
   
   <entry>
     <title>黑盒扫描</title>
