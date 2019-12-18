@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Security Developer">
+  <meta name="keywords" content="源码,dns,">
 
 
 
@@ -79,16 +79,28 @@
 
 
 
-<meta name="description" content="Security Developer">
-<meta property="og:type" content="website">
-<meta property="og:title" content="My Solo">
-<meta property="og:url" content="https://selfsolo.com/tags/源码/index.html">
+<meta name="description" content="DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。">
+<meta name="keywords" content="源码,dns">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开源DNS服务器源码解析（草稿笔记，待优化）">
+<meta property="og:url" content="https://selfsolo.com/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/index.html">
 <meta property="og:site_name" content="My Solo">
-<meta property="og:description" content="Security Developer">
+<meta property="og:description" content="DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204919.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218103654.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218105837.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218110645.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218111229.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218111629.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113239.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113958.png">
+<meta property="og:updated_time" content="2019-12-18T03:56:47.030Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="My Solo">
-<meta name="twitter:description" content="Security Developer">
+<meta name="twitter:title" content="开源DNS服务器源码解析（草稿笔记，待优化）">
+<meta name="twitter:description" content="DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。">
+<meta name="twitter:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png">
 
 
 
@@ -118,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="https://selfsolo.com/tags/源码/">
+  <link rel="canonical" href="https://selfsolo.com/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/">
 
 
 
 
 
-  <title>Tag: 源码 | My Solo</title>
+  <title>开源DNS服务器源码解析（草稿笔记，待优化） | My Solo</title>
   
 
 
@@ -143,7 +155,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,52 +259,242 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>源码<small>Tag</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://selfsolo.com/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sera Wang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218104336.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Solo">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/" itemprop="url">
-              
-                <span itemprop="name">开源DNS服务器源码解析（草稿笔记，待优化）</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">开源DNS服务器源码解析（草稿笔记，待优化）</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-09-18T20:32:56+08:00" content="2019-09-18">
-          09-18
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-18T20:32:56+08:00">
+                2019-09-18
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/sourcecode/" itemprop="url" rel="index">
+                    <span itemprop="name">sourcecode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/" class="leancloud_visitors" data-flag-title="开源DNS服务器源码解析（草稿笔记，待优化）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。</p>
+<a id="more"></a>
+
+
+
+<p>我们选择一个开源的DNS服务器，这里笔者选择的是 <a href="https://github.com/PowerDNS/pdns" target="_blank" rel="noopener">PowerDNS</a>，1800多star，也是很多公司搭建DNS服务的一个常见选择。</p>
+<p>编译安装暂略</p>
+<p>分支：rec-4.0.x</p>
+<p>###递归解析</p>
+<p>入口看 pdns_recursor.cc 文件，第690行开始，</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png" alt></p>
+<p>DNSComboWriter类似一个生产者，获取请求的 域名 d_qname 和 请求类型 d_qtype，下面是处理EDNS。</p>
+<p>再看下面</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204919.png" alt></p>
+<p>738行，初始化了一个DNSPacketWriter，用来写返回的packet。</p>
+<p>750行，初始化了解析器。用来做递归解析的。</p>
+<p>752行， 设置了Lua引擎指针 t_pdl，pdns通过Lua的形式提供了各种hook。</p>
+<p>再往下看，784行初始化了res，即返回码，服务端和客户端都会根据这个判断请求状态。如 Rcode为 SERVFAIL 时，很多开源的dns库就会报错。</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218103654.png" alt></p>
+<p>813行，会调用lua的一个hook，prerpz()方法。</p>
+<p>往下看</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218105837.png" alt></p>
+<p>823行，会调用Lua Hook，preresolve方法，在每次递归解析前会执行这个Hook。</p>
+<p>看if条件，如果没有启用 Lua 或者 preresolve 方法返回了false，会进行默认解析。</p>
+<p>825 - 860 行，看默认解析，是 RPZ 和 policy 的判断，这块暂略。不同policy会直接影响解析结果。</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218110645.png" alt></p>
+<p>try的块中，可以看到默认解析会调用 syncres.cc文件中的SyncRes类的beginResolve方法，shouldNotValidate的值是用来判断是否OOB的（OOB暂略）。中间报错会直接返回SERVFAIL。</p>
+<p>暂时不跟进，主要看Lua，往下看</p>
+<p>873行，判断返回码res是否等于-2（-2表示命中了过滤引擎的策略）</p>
+<blockquote>
+<p>syncres.cc</p>
+</blockquote>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218111229.png" alt></p>
+<p>同之前一样，下面就会根据不同policy进行处理。</p>
+<p>往下看，默认解析最后，如果没有报错的话，会执行Lua Hook，nodata方法</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218111629.png" alt></p>
+<p>第二个if 执行的是 nxdomain hook。（NXDOMAIN 暂略）</p>
+<p>最后再调用 Lua Hook，postresolve方法。（即解析完后执行）</p>
+<p>往下看，如果返回码res 不等于-1，都会执行</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113239.png" alt></p>
+<p>如果shouldNotValidate为true，即比如postresolve 中返回了false才会执行这段code。</p>
+<p>往下看，</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113958.png" alt></p>
+<p>会调用validateRecords方法（判断CSPF，暂略）判断解析记录的状态。</p>
+<p>然后根据不同状态设置ad码。</p>
+<p>下面是写到返回的packet中。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags/dns/" rel="tag"># dns</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/15/黑盒扫描/" rel="next" title="黑盒扫描">
+                <i class="fa fa-chevron-left"></i> 黑盒扫描
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -300,6 +502,13 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -556,6 +765,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
