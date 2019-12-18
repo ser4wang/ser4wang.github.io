@@ -87,10 +87,14 @@
 <meta property="og:site_name" content="My Solo">
 <meta property="og:description" content="DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-09-20T06:47:24.129Z">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204919.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218103654.png">
+<meta property="og:updated_time" content="2019-12-18T02:40:27.335Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="开源DNS服务器源码解析">
 <meta name="twitter:description" content="DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。">
+<meta name="twitter:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png">
 
 
 
@@ -268,7 +272,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Sera Wang">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191024213123.png">
+      <meta itemprop="image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218104336.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -384,6 +388,19 @@
 
 
 <p>我们选择一个开源的DNS服务器，这里笔者选择的是 <a href="https://github.com/PowerDNS/pdns" target="_blank" rel="noopener">PowerDNS</a>，1800多star，也是很多公司搭建DNS服务的一个常见选择。</p>
+<p>编译安装暂略</p>
+<p>分支：rec-4.0.x</p>
+<p>###递归解析</p>
+<p>入口看 pdns_recursor.cc 文件，第690行开始，</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png" alt></p>
+<p>DNSComboWriter类似一个生产者，获取请求的 域名 d_qname 和 请求类型 d_qtype，下面是处理EDNS。</p>
+<p>再看下面</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204919.png" alt></p>
+<p>738行，初始化了一个DNSPacketWriter，用来写返回的packet。</p>
+<p>750行，初始化了解析器。用来做递归解析的。</p>
+<p>752行， 设置了Lua引擎，Lua是提供了各种hook。</p>
+<p>往下看，784行初始化了res，是返回的</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218103654.png" alt></p>
 
       
     </div>
@@ -484,7 +501,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191024213123.png" alt="Sera Wang">
+              <img class="site-author-image" itemprop="image" src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218104336.png" alt="Sera Wang">
             
               <p class="site-author-name" itemprop="name">Sera Wang</p>
               <p class="site-description motion-element" itemprop="description">Security Developer</p>

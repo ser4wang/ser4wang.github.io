@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://selfsolo.com/"/>
-  <updated>2019-09-20T06:47:24.129Z</updated>
+  <updated>2019-12-18T02:40:27.335Z</updated>
   <id>https://selfsolo.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://selfsolo.com/2019/09/18/%E5%BC%80%E6%BA%90DNS%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
     <id>https://selfsolo.com/2019/09/18/开源DNS服务器源码解析/</id>
     <published>2019-09-18T12:32:56.000Z</published>
-    <updated>2019-09-20T06:47:24.129Z</updated>
+    <updated>2019-12-18T02:40:27.335Z</updated>
     
-    <content type="html"><![CDATA[<p>DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。</p><a id="more"></a><p>我们选择一个开源的DNS服务器，这里笔者选择的是 <a href="https://github.com/PowerDNS/pdns" target="_blank" rel="noopener">PowerDNS</a>，1800多star，也是很多公司搭建DNS服务的一个常见选择。</p>]]></content>
+    <content type="html"><![CDATA[<p>DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇起因源于一次事故，下面就听在下娓娓道来。</p><a id="more"></a><p>我们选择一个开源的DNS服务器，这里笔者选择的是 <a href="https://github.com/PowerDNS/pdns" target="_blank" rel="noopener">PowerDNS</a>，1800多star，也是很多公司搭建DNS服务的一个常见选择。</p><p>编译安装暂略</p><p>分支：rec-4.0.x</p><p>###递归解析</p><p>入口看 pdns_recursor.cc 文件，第690行开始，</p><p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png" alt></p><p>DNSComboWriter类似一个生产者，获取请求的 域名 d_qname 和 请求类型 d_qtype，下面是处理EDNS。</p><p>再看下面</p><p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204919.png" alt></p><p>738行，初始化了一个DNSPacketWriter，用来写返回的packet。</p><p>750行，初始化了解析器。用来做递归解析的。</p><p>752行， 设置了Lua引擎，Lua是提供了各种hook。</p><p>往下看，784行初始化了res，是返回的</p><p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218103654.png" alt></p>]]></content>
     
     <summary type="html">
     
