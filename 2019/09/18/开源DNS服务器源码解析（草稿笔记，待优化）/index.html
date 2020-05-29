@@ -79,15 +79,17 @@
 
 
 
-<meta name="description" content="###前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
+<meta name="description" content="##前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
 <meta name="keywords" content="源码,dns">
 <meta property="og:type" content="article">
 <meta property="og:title" content="开源DNS服务器源码解析（草稿笔记，待优化）">
 <meta property="og:url" content="https://selfsolo.com/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/index.html">
 <meta property="og:site_name" content="My Solo">
-<meta property="og:description" content="###前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
+<meta property="og:description" content="##前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212045.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212817.png">
+<meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200112164805.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204919.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218103654.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218105837.png">
@@ -96,11 +98,11 @@
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218111629.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113239.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113958.png">
-<meta property="og:updated_time" content="2020-01-06T12:59:28.040Z">
+<meta property="og:updated_time" content="2020-01-13T06:25:32.186Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="开源DNS服务器源码解析（草稿笔记，待优化）">
-<meta name="twitter:description" content="###前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
-<meta name="twitter:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png">
+<meta name="twitter:description" content="##前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
+<meta name="twitter:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212045.png">
 
 
 
@@ -278,7 +280,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Sera Wang">
       <meta itemprop="description" content>
-      <meta itemprop="image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218104336.png">
+      <meta itemprop="image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200529214602.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -388,21 +390,53 @@
       
 
       
-        <p>###前言</p>
+        <p>##前言</p>
 <p>DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。</p>
 <a id="more"></a>
 
 
 
 <p>我们选择一个开源的DNS服务器，这里笔者选择的是 <a href="https://github.com/PowerDNS/pdns" target="_blank" rel="noopener">PowerDNS</a>，也是很多组织或企业搭建DNS服务的一个常见选择。</p>
-<p>###编译安装</p>
+<p>##编译安装</p>
 <p>暂略</p>
 <p>分支：rec-4.0.x</p>
-<p>###递归解析</p>
-<p>初始化 main()</p>
-<p>默认DNSSEC模式值 process-no-validate</p>
-<p>入口看 pdns_recursor.cc 文件，第690行开始，</p>
-<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204457.png" alt></p>
+<p>##递归解析 源码</p>
+<p>分析的几点，</p>
+<ol>
+<li><p>开启Lua与否的区别</p>
+</li>
+<li></li>
+</ol>
+<p>入口看 pdns_recursor.cc 文件，main() 函数主要读取各种配置以及各种初始化。</p>
+<p>###startDoResolve 函数</p>
+<p>####1. Line 690-760 </p>
+<p>![image-20200110211550470](/Users/wangwenqi/Library/Application Support/typora-user-images/image-20200110211550470.png)</p>
+<p>主要初始化一些变量，介绍一部分。</p>
+<p>edns是rfc里用来储存DNS额外信息（客户端IP）。默认不开。</p>
+<p>pw是 DNSPacketWriter，顾名思义，用来写返回包的。</p>
+<p>740 - 746行 设置了一些DNS包的标志位。</p>
+<p>下面初始化了一个SyncRes类（核心），初始化了Lua引擎</p>
+<p>756行 因为DNSSEC的默认值是 process-no-validate，所以默认会进行DNSSEC行为。</p>
+<p>####2. Line 779-821</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212045.png" alt></p>
+<p>781行 shouldNotValidate变量设置默认值false</p>
+<p>####3. Line 822-973</p>
+<p>到了一个if判断。这是关键位置。</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212817.png" alt></p>
+<p>if的条件是 没开Lua hook 或者 preresolve 这个Lua hook 直接return false，则执行。</p>
+<p>先进行了一次 wantsRPZ (默认true)，根据不同policy进行相应处理。</p>
+<p>下面的try catch会进入一个 beginResolve方法，即进行<strong>递归解析，先不跟进</strong>。</p>
+<p>874行 判断res，是否等于 -2。代码会switch policy的值进行不同操作。</p>
+<p>918行 如果res == RCode::NoError ，遍历结果，按情况会执行一个 nodata hook.</p>
+<p>935行 又执行了一次wantsRPZ</p>
+<p>####4. Line 974-1105</p>
+<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200112164805.png" alt></p>
+<p>975 判断res值是否等于DROP，是则直接return。</p>
+<p>981 如果错误会打Log</p>
+<p>993 判断res值是否等于 -1，是则返回包设置为Servfail</p>
+<p>若res不等于 -1，写返回的rcode（设置为res值）</p>
+<p>1002 若需要validate（执行lua hook后则不需要，这是一个区分点），则会进行使用validateRecords(ret)验证，根据state值执行不同操作。</p>
+<p>1057 结果不为空，会调用 orderAndShuffle(ret)</p>
 <p>DNSComboWriter类似一个生产者，获取请求的 域名 d_qname 和 请求类型 d_qtype，下面是处理EDNS。</p>
 <p>再看下面</p>
 <p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191217204919.png" alt></p>
@@ -538,7 +572,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image" src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218104336.png" alt="Sera Wang">
+              <img class="site-author-image" itemprop="image" src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200529214602.png" alt="Sera Wang">
             
               <p class="site-author-name" itemprop="name">Sera Wang</p>
               <p class="site-description motion-element" itemprop="description">Security Developer</p>
