@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="##前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
+<meta name="description" content="前言DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
 <meta name="keywords" content="源码,dns">
 <meta property="og:type" content="article">
 <meta property="og:title" content="开源DNS服务器源码解析（草稿笔记，待优化）">
 <meta property="og:url" content="https://selfsolo.com/2019/09/18/开源DNS服务器源码解析（草稿笔记，待优化）/index.html">
 <meta property="og:site_name" content="My Solo">
-<meta property="og:description" content="##前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
+<meta property="og:description" content="前言DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212045.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212817.png">
@@ -98,10 +98,10 @@
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218111629.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113239.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20191218113958.png">
-<meta property="og:updated_time" content="2020-01-13T06:25:32.186Z">
+<meta property="og:updated_time" content="2020-05-30T03:25:04.211Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="开源DNS服务器源码解析（草稿笔记，待优化）">
-<meta name="twitter:description" content="##前言 DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
+<meta name="twitter:description" content="前言DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。">
 <meta name="twitter:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212045.png">
 
 
@@ -390,38 +390,31 @@
       
 
       
-        <p>##前言</p>
-<p>DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。</p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>DNS是网络的基础服务，通过阅读开源的DNS Server源码，可以更好地帮助我们了解其工作机制及原理。本篇的撰写源于一次事故，下面就听在下娓娓道来。</p>
 <a id="more"></a>
 
 
 
 <p>我们选择一个开源的DNS服务器，这里笔者选择的是 <a href="https://github.com/PowerDNS/pdns" target="_blank" rel="noopener">PowerDNS</a>，也是很多组织或企业搭建DNS服务的一个常见选择。</p>
-<p>##编译安装</p>
-<p>暂略</p>
+<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><p>暂略</p>
 <p>分支：rec-4.0.x</p>
-<p>##递归解析 源码</p>
-<p>分析的几点，</p>
+<h2 id="递归解析-源码"><a href="#递归解析-源码" class="headerlink" title="递归解析 源码"></a>递归解析 源码</h2><p>分析的几点，</p>
 <ol>
 <li><p>开启Lua与否的区别</p>
 </li>
 <li></li>
 </ol>
 <p>入口看 pdns_recursor.cc 文件，main() 函数主要读取各种配置以及各种初始化。</p>
-<p>###startDoResolve 函数</p>
-<p>####1. Line 690-760 </p>
-<p>![image-20200110211550470](/Users/wangwenqi/Library/Application Support/typora-user-images/image-20200110211550470.png)</p>
+<h3 id="startDoResolve-函数"><a href="#startDoResolve-函数" class="headerlink" title="startDoResolve 函数"></a>startDoResolve 函数</h3><h4 id="1-Line-690-760"><a href="#1-Line-690-760" class="headerlink" title="1. Line 690-760"></a>1. Line 690-760</h4><p>![image-20200110211550470](/Users/wangwenqi/Library/Application Support/typora-user-images/image-20200110211550470.png)</p>
 <p>主要初始化一些变量，介绍一部分。</p>
 <p>edns是rfc里用来储存DNS额外信息（客户端IP）。默认不开。</p>
 <p>pw是 DNSPacketWriter，顾名思义，用来写返回包的。</p>
 <p>740 - 746行 设置了一些DNS包的标志位。</p>
 <p>下面初始化了一个SyncRes类（核心），初始化了Lua引擎</p>
 <p>756行 因为DNSSEC的默认值是 process-no-validate，所以默认会进行DNSSEC行为。</p>
-<p>####2. Line 779-821</p>
-<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212045.png" alt></p>
+<h4 id="2-Line-779-821"><a href="#2-Line-779-821" class="headerlink" title="2. Line 779-821"></a>2. Line 779-821</h4><p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212045.png" alt></p>
 <p>781行 shouldNotValidate变量设置默认值false</p>
-<p>####3. Line 822-973</p>
-<p>到了一个if判断。这是关键位置。</p>
+<h4 id="3-Line-822-973"><a href="#3-Line-822-973" class="headerlink" title="3. Line 822-973"></a>3. Line 822-973</h4><p>到了一个if判断。这是关键位置。</p>
 <p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200110212817.png" alt></p>
 <p>if的条件是 没开Lua hook 或者 preresolve 这个Lua hook 直接return false，则执行。</p>
 <p>先进行了一次 wantsRPZ (默认true)，根据不同policy进行相应处理。</p>
@@ -429,8 +422,7 @@
 <p>874行 判断res，是否等于 -2。代码会switch policy的值进行不同操作。</p>
 <p>918行 如果res == RCode::NoError ，遍历结果，按情况会执行一个 nodata hook.</p>
 <p>935行 又执行了一次wantsRPZ</p>
-<p>####4. Line 974-1105</p>
-<p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200112164805.png" alt></p>
+<h4 id="4-Line-974-1105"><a href="#4-Line-974-1105" class="headerlink" title="4. Line 974-1105"></a>4. Line 974-1105</h4><p><img src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20200112164805.png" alt></p>
 <p>975 判断res值是否等于DROP，是则直接return。</p>
 <p>981 如果错误会打Log</p>
 <p>993 判断res值是否等于 -1，是则返回包设置为Servfail</p>
@@ -514,6 +506,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/05/30/机器学习-入门篇/" rel="prev" title="机器学习 - 入门篇">
+                机器学习 - 入门篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -567,8 +563,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -585,7 +590,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -596,7 +601,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">categories</span>
                 
               </div>
@@ -607,7 +612,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -640,6 +645,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装"><span class="nav-number">2.</span> <span class="nav-text">编译安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#递归解析-源码"><span class="nav-number">3.</span> <span class="nav-text">递归解析 源码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#startDoResolve-函数"><span class="nav-number">3.1.</span> <span class="nav-text">startDoResolve 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Line-690-760"><span class="nav-number">3.1.1.</span> <span class="nav-text">1. Line 690-760</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-Line-779-821"><span class="nav-number">3.1.2.</span> <span class="nav-text">2. Line 779-821</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Line-822-973"><span class="nav-number">3.1.3.</span> <span class="nav-text">3. Line 822-973</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-Line-974-1105"><span class="nav-number">3.1.4.</span> <span class="nav-text">4. Line 974-1105</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -993,6 +1014,8 @@
   
 
   
+  
+
 
   
 
