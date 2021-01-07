@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Golang,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="起因起因是一次API的测试，发现gin框架在一定条件下解析URL中的查询字符串时，存在获取不到参数的情况。比如输入 index?user=123.%sera，使用gin的 c.Query(“xxx”) 值会返回空。">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】net&#x2F;url包一定条件下参数获取异常">
+<meta property="og:url" content="https://selfsolo.com/2021/01/07/【Go】net-url包一定条件下参数获取异常/index.html">
+<meta property="og:site_name" content="My Solo">
+<meta property="og:description" content="起因起因是一次API的测试，发现gin框架在一定条件下解析URL中的查询字符串时，存在获取不到参数的情况。比如输入 index?user=123.%sera，使用gin的 c.Query(“xxx”) 值会返回空。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2021-01-07T13:39:40.330Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Go】net&#x2F;url包一定条件下参数获取异常">
+<meta name="twitter:description" content="起因起因是一次API的测试，发现gin框架在一定条件下解析URL中的查询字符串时，存在获取不到参数的情况。比如输入 index?user=123.%sera，使用gin的 c.Query(“xxx”) 值会返回空。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://selfsolo.com/2021/01/07/【Go】net-url包一定条件下参数获取异常/">
+
+
+
+
+
+  <title>【Go】net/url包一定条件下参数获取异常 | My Solo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">My Solo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://selfsolo.com/2021/01/07/【Go】net-url包一定条件下参数获取异常/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Sera Wang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/20210107214201.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="My Solo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【Go】net/url包一定条件下参数获取异常</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-07T21:06:32+08:00">
+                2021-01-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开发/" itemprop="url" rel="index">
+                    <span itemprop="name">开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2021/01/07/【Go】net-url包一定条件下参数获取异常/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2021/01/07/【Go】net-url包一定条件下参数获取异常/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2021/01/07/【Go】net-url包一定条件下参数获取异常/" class="leancloud_visitors" data-flag-title="【Go】net/url包一定条件下参数获取异常">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h3><p>起因是一次API的测试，发现gin框架在一定条件下解析URL中的查询字符串时，存在获取不到参数的情况。比如输入 index?user=123.%sera，使用gin的 c.Query(“xxx”) 值会返回空。</p>
+<a id="more"></a>
+
+
+
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Foo</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	data := c.DefaultQuery(<span class="string">"x"</span>, <span class="string">""</span>)</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(data) == <span class="number">0</span> &#123;</span><br><span class="line">		Response(c, <span class="string">"param empty: x"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	f, err := XX.Callback(data)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		Response(c, err.Error())</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	Response(c, f)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>GET请求试了几个参数</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">HTTP GET: http://127.0.0.1:1234/x?x=y</span><br><span class="line"></span><br><span class="line"><span class="attribute">y:</span></span><br><span class="line"><span class="attribute">test</span></span><br><span class="line"><span class="attribute">test.user</span></span><br><span class="line"> [空格]</span><br><span class="line"><span class="attribute">123.*foo</span></span><br><span class="line"><span class="attribute">123.%foo</span></span><br></pre></td></tr></table></figure>
+
+<p>前几个参数的返回结果都符合预期，哪怕是空格，gin也都识别了出来，但是到 123.%foo 这个参数时，就发现gin获取不到了，len(x) 为0，以防万一先测试了一下 len(“123.%foo”)是正常的。</p>
+<p>所以推测是gin在URL解析时对查询字符串里的 %参数处理有问题，那么具体是什么原因导致的这个问题呢？</p>
+<h3 id="gin是怎么解析查询字符串的？"><a href="#gin是怎么解析查询字符串的？" class="headerlink" title="gin是怎么解析查询字符串的？"></a>gin是怎么解析查询字符串的？</h3><p>gin实际上使用的是 Golang原生包 net/url提供的 parseQuery()方法，代码如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">parseQuery</span><span class="params">(m Values, query <span class="keyword">string</span>)</span> <span class="params">(err error)</span></span> &#123;</span><br><span class="line">   <span class="keyword">for</span> query != <span class="string">""</span> &#123;</span><br><span class="line">      key := query</span><br><span class="line">      <span class="keyword">if</span> i := strings.IndexAny(key, <span class="string">"&amp;;"</span>); i &gt;= <span class="number">0</span> &#123;</span><br><span class="line">         key, query = key[:i], key[i+<span class="number">1</span>:]</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         query = <span class="string">""</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> key == <span class="string">""</span> &#123;</span><br><span class="line">         <span class="keyword">continue</span></span><br><span class="line">      &#125;</span><br><span class="line">      value := <span class="string">""</span></span><br><span class="line">      <span class="keyword">if</span> i := strings.Index(key, <span class="string">"="</span>); i &gt;= <span class="number">0</span> &#123;</span><br><span class="line">         key, value = key[:i], key[i+<span class="number">1</span>:]</span><br><span class="line">      &#125;</span><br><span class="line">      key, err1 := QueryUnescape(key)</span><br><span class="line">      <span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</span><br><span class="line">         <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">            err = err1</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">continue</span></span><br><span class="line">      &#125;</span><br><span class="line">      value, err1 = QueryUnescape(value)</span><br><span class="line">      <span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</span><br><span class="line">         <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">            err = err1</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">continue</span></span><br><span class="line">      &#125;</span><br><span class="line">      m[key] = <span class="built_in">append</span>(m[key], value)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>基本上，它做的就是把 param1=value1&amp;param2=value2，变成如下的一个map，我们调用Query就是获取map中对应key的值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">map</span>[<span class="keyword">string</span>][]<span class="keyword">string</span>&#123;</span><br><span class="line">	<span class="string">"param1"</span>: []<span class="keyword">string</span>&#123;<span class="string">"value1"</span>&#125;,</span><br><span class="line">	<span class="string">"param2"</span>: []<span class="keyword">string</span>&#123;<span class="string">"value2"</span>&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但众所周知有URL编码的存在，所以URL包也会URL编码做了处理（它会使用unescape方法对map中的key和value分别做一次URL解码）</p>
+<h4 id="unescape-函数-略长"><a href="#unescape-函数-略长" class="headerlink" title="unescape 函数 (略长)"></a>unescape 函数 (略长)</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// unescape unescapes a string; the mode specifies</span></span><br><span class="line"><span class="comment">// which section of the URL string is being unescaped.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">unescape</span><span class="params">(s <span class="keyword">string</span>, mode encoding)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line">   <span class="comment">// Count %, check that they're well-formed.</span></span><br><span class="line">   n := <span class="number">0</span></span><br><span class="line">   hasPlus := <span class="literal">false</span></span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(s); &#123;</span><br><span class="line">      <span class="keyword">switch</span> s[i] &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'%'</span>:</span><br><span class="line">         n++</span><br><span class="line">         <span class="keyword">if</span> i+<span class="number">2</span> &gt;= <span class="built_in">len</span>(s) || !ishex(s[i+<span class="number">1</span>]) || !ishex(s[i+<span class="number">2</span>]) &#123;</span><br><span class="line">            s = s[i:]</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(s) &gt; <span class="number">3</span> &#123;</span><br><span class="line">               s = s[:<span class="number">3</span>]</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>, EscapeError(s)</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">// Per https://tools.ietf.org/html/rfc3986#page-21</span></span><br><span class="line">         <span class="comment">// in the host component %-encoding can only be used</span></span><br><span class="line">         <span class="comment">// for non-ASCII bytes.</span></span><br><span class="line">         <span class="comment">// But https://tools.ietf.org/html/rfc6874#section-2</span></span><br><span class="line">         <span class="comment">// introduces %25 being allowed to escape a percent sign</span></span><br><span class="line">         <span class="comment">// in IPv6 scoped-address literals. Yay.</span></span><br><span class="line">         <span class="keyword">if</span> mode == encodeHost &amp;&amp; unhex(s[i+<span class="number">1</span>]) &lt; <span class="number">8</span> &amp;&amp; s[i:i+<span class="number">3</span>] != <span class="string">"%25"</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>, EscapeError(s[i : i+<span class="number">3</span>])</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">if</span> mode == encodeZone &#123;</span><br><span class="line">            <span class="comment">// RFC 6874 says basically "anything goes" for zone identifiers</span></span><br><span class="line">            <span class="comment">// and that even non-ASCII can be redundantly escaped,</span></span><br><span class="line">            <span class="comment">// but it seems prudent to restrict %-escaped bytes here to those</span></span><br><span class="line">            <span class="comment">// that are valid host name bytes in their unescaped form.</span></span><br><span class="line">            <span class="comment">// That is, you can use escaping in the zone identifier but not</span></span><br><span class="line">            <span class="comment">// to introduce bytes you couldn't just write directly.</span></span><br><span class="line">            <span class="comment">// But Windows puts spaces here! Yay.</span></span><br><span class="line">            v := unhex(s[i+<span class="number">1</span>])&lt;&lt;<span class="number">4</span> | unhex(s[i+<span class="number">2</span>])</span><br><span class="line">            <span class="keyword">if</span> s[i:i+<span class="number">3</span>] != <span class="string">"%25"</span> &amp;&amp; v != <span class="string">' '</span> &amp;&amp; shouldEscape(v, encodeHost) &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="string">""</span>, EscapeError(s[i : i+<span class="number">3</span>])</span><br><span class="line">            &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         i += <span class="number">3</span></span><br><span class="line">      <span class="keyword">case</span> <span class="string">'+'</span>:</span><br><span class="line">         hasPlus = mode == encodeQueryComponent</span><br><span class="line">         i++</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">         <span class="keyword">if</span> (mode == encodeHost || mode == encodeZone) &amp;&amp; s[i] &lt; <span class="number">0x80</span> &amp;&amp; shouldEscape(s[i], mode) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>, InvalidHostError(s[i : i+<span class="number">1</span>])</span><br><span class="line">         &#125;</span><br><span class="line">         i++</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">if</span> n == <span class="number">0</span> &amp;&amp; !hasPlus &#123;</span><br><span class="line">      <span class="keyword">return</span> s, <span class="literal">nil</span></span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">var</span> t strings.Builder</span><br><span class="line">   t.Grow(<span class="built_in">len</span>(s) - <span class="number">2</span>*n)</span><br><span class="line">   <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(s); i++ &#123;</span><br><span class="line">      <span class="keyword">switch</span> s[i] &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'%'</span>:</span><br><span class="line">         t.WriteByte(unhex(s[i+<span class="number">1</span>])&lt;&lt;<span class="number">4</span> | unhex(s[i+<span class="number">2</span>]))</span><br><span class="line">         i += <span class="number">2</span></span><br><span class="line">      <span class="keyword">case</span> <span class="string">'+'</span>:</span><br><span class="line">         <span class="keyword">if</span> mode == encodeQueryComponent &#123;</span><br><span class="line">            t.WriteByte(<span class="string">' '</span>)</span><br><span class="line">         &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            t.WriteByte(<span class="string">'+'</span>)</span><br><span class="line">         &#125;</span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">         t.WriteByte(s[i])</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> t.String(), <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>大致看了逻辑后就知道问题出在 line 9-17里它对 %号的解析，如果说一个查询字符串使用了不标准的URL编码（一个标准的URL编码由百分号%和字符的ASCII码对应的两位十六进制数组成，比如 %3C。ASCII码范围为 00-7F），那么URL解析就会返回空值和一个解码错误，而Golang对于此错误没有进行处理，所以导致诸如 123.%foo这种值会返回空。</p>
+<h3 id="和Mysql的冲突"><a href="#和Mysql的冲突" class="headerlink" title="和Mysql的冲突"></a>和Mysql的冲突</h3><p>另一个地方，对于 %99 这样无法解码但符合 Golang的URL包中描述的 %[0-9a-fA-F]{2} 逻辑的，又会报一个新的错误：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error <span class="number">1267</span>: Illegal mix of collations (utf8_general_ci,IMPLICIT) and (utf8mb4_general_ci,COERCIBLE) <span class="keyword">for</span> operation <span class="string">'='</span></span><br></pre></td></tr></table></figure>
+
+<p>这个错误是Mysql抛出来的，原因是因为Golang的URL包对一个URL编码的判断标准是 %[0-9a-fA-F]{2}，符合此标准它就不会抛出解码错误，但是它却会尝试对其进行解码，解码的函数如下</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unhex(s[i+<span class="number">1</span>])&lt;&lt;<span class="number">4</span> | unhex(s[i+<span class="number">2</span>])</span><br></pre></td></tr></table></figure>
+
+<p>即它会将 %99解码成一个ASCII码，但显然不在ASCII码里就会和Mysql的编码冲突，于是Mysql就把这个错误给抛了出来。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Golang/" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/30/机器学习-入门篇/" rel="next" title="机器学习 - 入门篇">
+                <i class="fa fa-chevron-left"></i> 机器学习 - 入门篇
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20210107214201.png" alt="Sera Wang">
+            
+              <p class="site-author-name" itemprop="name">Sera Wang</p>
+              <p class="site-description motion-element" itemprop="description">Security Developer</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ser4wang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">2.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gin是怎么解析查询字符串的？"><span class="nav-number">4.</span> <span class="nav-text">gin是怎么解析查询字符串的？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#unescape-函数-略长"><span class="nav-number">4.1.</span> <span class="nav-text">unescape 函数 (略长)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#和Mysql的冲突"><span class="nav-number">5.</span> <span class="nav-text">和Mysql的冲突</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Sera Wang</span>
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'YwC5oGEmRoaoLzoRofWijF8F-gzGzoHsz',
+        appKey: 'SMMJNIa8CtC5NuIYv5uMbWNO',
+        placeholder: '说点什么吧～',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("YwC5oGEmRoaoLzoRofWijF8F-gzGzoHsz", "SMMJNIa8CtC5NuIYv5uMbWNO");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
