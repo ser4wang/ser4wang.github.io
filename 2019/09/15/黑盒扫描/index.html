@@ -84,12 +84,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="黑盒扫描">
 <meta property="og:url" content="https://selfsolo.com/2019/09/15/黑盒扫描/index.html">
-<meta property="og:site_name" content="My Solo">
+<meta property="og:site_name" content="Sera&#39;s Lab">
 <meta property="og:description" content="黑盒扫描应该是很基本的一个安全产品，可以用很低的成本去发现安全问题，同时提升SDL渗透的效率。">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/Lark20190916-184509.png">
 <meta property="og:image" content="https://ser4wang.oss-cn-beijing.aliyuncs.com/Lark20190916-184731.png">
-<meta property="og:updated_time" content="2019-09-16T11:49:57.176Z">
+<meta property="og:updated_time" content="2019-09-16T11:49:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="黑盒扫描">
 <meta name="twitter:description" content="黑盒扫描应该是很基本的一个安全产品，可以用很低的成本去发现安全问题，同时提升SDL渗透的效率。">
@@ -129,7 +129,7 @@
 
 
 
-  <title>黑盒扫描 | My Solo</title>
+  <title>黑盒扫描 | Sera's Lab</title>
   
 
 
@@ -159,12 +159,12 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">My Solo</span>
+        <span class="site-title">Sera's Lab</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <h1 class="site-subtitle" itemprop="description"></h1>
       
   </div>
 
@@ -275,7 +275,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="My Solo">
+      <meta itemprop="name" content="Sera's Lab">
     </span>
 
     
@@ -283,7 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">黑盒扫描</h1>
+          <h2 class="post-title" itemprop="name headline">黑盒扫描</h2>
         
 
         <div class="post-meta">
@@ -337,7 +337,7 @@
                   <i class="fa fa-comment-o"></i>
                 </span>
                 <a href="/2019/09/15/黑盒扫描/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/09/15/黑盒扫描/" itemprop="commentCount"></span>
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/09/15/黑盒扫描/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -454,7 +454,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/14/hello-world/" rel="next" title="旧Blog不再使用，重新审视自己">
+              <a href="/2019/09/15/hello-world/" rel="next" title="旧Blog不再使用，重新审视自己">
                 <i class="fa fa-chevron-left"></i> 旧Blog不再使用，重新审视自己
               </a>
             
@@ -497,7 +497,11 @@
 
   
     <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
     </div>
+
   
 
 
@@ -538,7 +542,7 @@
               <img class="site-author-image" itemprop="image" src="https://ser4wang.oss-cn-beijing.aliyuncs.com/20210107214201.png" alt="Sera Wang">
             
               <p class="site-author-name" itemprop="name">Sera Wang</p>
-              <p class="site-description motion-element" itemprop="description">Security Developer</p>
+              <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
           <nav class="site-state motion-element">
@@ -570,7 +574,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -714,8 +718,6 @@
   
 
 
-  
-
 
 
 
@@ -754,11 +756,6 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
   
 
 
@@ -822,30 +819,52 @@
 
 
 
+<!-- LOCAL: You can save these files to your site and update links -->
+    
+        
+        <link rel="stylesheet" href="https://aimingoo.github.io/gitmint/style/default.css">
+        <script src="https://aimingoo.github.io/gitmint/dist/gitmint.browser.js"></script>
+    
+<!-- END LOCAL -->
+
+    
+      <style>
+        a.gitment-editor-footer-tip { display: none; }
+        .gitment-container.gitment-footer-container { display: none; }
+      </style>
+    
+
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'ser4wang',
+            repo: 'ser4wang.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+                redirect_protocol: 'http',
+            
+            
+                client_secret: '85bc9f37a1749c5003916d8af183ae93b0ec8f13',
+            
+                client_id: '343b1c80411ed6dfb948'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
+    
 
 
 
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-  
-  <script type="text/javascript">
-    var GUEST = ['nick','mail','link'];
-    var guest = 'nick';
-    guest = guest.split(',').filter(item=>{
-      return GUEST.indexOf(item)>-1;
-    });
-    new Valine({
-        el: '#comments' ,
-        verify: false,
-        notify: false,
-        appId: 'YwC5oGEmRoaoLzoRofWijF8F-gzGzoHsz',
-        appKey: 'SMMJNIa8CtC5NuIYv5uMbWNO',
-        placeholder: '说点什么吧～',
-        avatar:'mm',
-        guest_info:guest,
-        pageSize:'10' || 10,
-    });
-  </script>
+
 
 
 
@@ -967,6 +986,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   
